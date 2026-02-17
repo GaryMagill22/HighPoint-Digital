@@ -1,0 +1,29 @@
+{
+  "id": "content-planning",
+  "label": "Content Planning",
+  "description": "Generates a keyword-driven content plan based on the client profile.",
+  "required_inputs": [
+    {
+      "key": "targetKeywords",
+      "label": "Target Keywords (comma-separated)",
+      "type": "textarea",
+      "placeholder": "seo services sydney, local seo, technical seo audit"
+    },
+    {
+      "key": "timeframeMonths",
+      "label": "Timeframe (months)",
+      "type": "number",
+      "placeholder": "3"
+    }
+  ],
+  "prompt_template": "You are an SEO strategist. Client profile: {{client_profile}}. Generate a structured content plan targeting the following keywords: {{inputs.targetKeywords}}. The plan should cover {{inputs.timeframeMonths}} months and include pillar pages, cluster articles, a publication schedule, and specific keyword targets for each piece.",
+  "output_schema": {
+    "type": "object",
+    "properties": {
+      "pillarPages": { "type": "array", "items": { "type": "string" }, "description": "Proposed pillar page topics" },
+      "clusterArticles": { "type": "array", "items": { "type": "string" }, "description": "Supporting cluster article titles" },
+      "publicationSchedule": { "type": "string", "description": "Recommended publishing cadence and timeline" },
+      "keywordTargets": { "type": "array", "items": { "type": "string" }, "description": "Primary keyword target for each content piece" }
+    }
+  }
+}

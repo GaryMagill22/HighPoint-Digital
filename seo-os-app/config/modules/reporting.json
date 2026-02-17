@@ -1,0 +1,29 @@
+{
+  "id": "reporting",
+  "label": "SEO Report",
+  "description": "Compiles a client-facing SEO performance report for a given date range.",
+  "required_inputs": [
+    {
+      "key": "dateRangeStart",
+      "label": "Report Start Date",
+      "type": "date",
+      "placeholder": ""
+    },
+    {
+      "key": "dateRangeEnd",
+      "label": "Report End Date",
+      "type": "date",
+      "placeholder": ""
+    }
+  ],
+  "prompt_template": "You are an SEO analyst. Client profile: {{client_profile}}. Generate a comprehensive SEO performance report covering the period from {{inputs.dateRangeStart}} to {{inputs.dateRangeEnd}}. Include key metrics, keyword ranking movements, top performing pages, and identified issues.",
+  "output_schema": {
+    "type": "object",
+    "properties": {
+      "metrics": { "type": "object", "description": "Key performance metrics for the period" },
+      "keywords": { "type": "array", "items": { "type": "string" }, "description": "Top keyword rankings and movements" },
+      "pages": { "type": "array", "items": { "type": "string" }, "description": "Top performing pages" },
+      "issues": { "type": "array", "items": { "type": "string" }, "description": "Issues identified during the period" }
+    }
+  }
+}

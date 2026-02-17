@@ -12,7 +12,15 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <nav>
+          <a href="/">Home</a>{" | "}
+          <a href="/clients">Clients</a>{" | "}
+          <a href="/run">Run Module</a>{" | "}
+          <a href="/history">History</a>
+        </nav>
+        <main>{children}</main>
+      </body>
     </html>
   );
 }

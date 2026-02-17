@@ -1,0 +1,30 @@
+{
+  "id": "site-audit",
+  "label": "Site Audit",
+  "description": "Performs a technical SEO audit of the target domain.",
+  "required_inputs": [
+    {
+      "key": "domain",
+      "label": "Target Domain",
+      "type": "text",
+      "placeholder": "https://example.com"
+    },
+    {
+      "key": "maxPages",
+      "label": "Max Pages to Crawl",
+      "type": "number",
+      "placeholder": "100"
+    }
+  ],
+  "prompt_template": "You are an SEO auditor. Client profile: {{client_profile}}. Audit the domain {{inputs.domain}} crawling up to {{inputs.maxPages}} pages. Return a structured audit report covering technical issues, on-page issues, backlink summary, and prioritised recommendations.",
+  "output_schema": {
+    "type": "object",
+    "properties": {
+      "executiveSummary": { "type": "string", "description": "High-level summary of audit findings" },
+      "technicalIssues": { "type": "array", "items": { "type": "string" }, "description": "List of technical SEO issues found" },
+      "onPageIssues": { "type": "array", "items": { "type": "string" }, "description": "On-page SEO issues" },
+      "backlinkSummary": { "type": "string", "description": "Summary of backlink profile" },
+      "recommendations": { "type": "array", "items": { "type": "string" }, "description": "Prioritised action items" }
+    }
+  }
+}

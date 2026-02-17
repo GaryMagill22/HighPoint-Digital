@@ -4,9 +4,22 @@
 import fs from "node:fs";
 import path from "node:path";
 
+export type InputFieldType = "text" | "number" | "date" | "textarea";
+
+export interface RequiredInput {
+  key: string;
+  label: string;
+  type: InputFieldType;
+  placeholder?: string;
+}
+
 export interface ModuleDefinition {
   id: string;
-  [key: string]: unknown;
+  label: string;
+  description?: string;
+  required_inputs: RequiredInput[];
+  prompt_template: string;
+  output_schema: Record<string, unknown>;
 }
 
 function loadAllModules(): ModuleDefinition[] {
