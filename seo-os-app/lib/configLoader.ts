@@ -20,6 +20,8 @@ export interface ModuleDefinition {
   required_inputs: RequiredInput[];
   prompt_template: string;
   output_schema: Record<string, unknown>;
+  /** Per-module token limit. Defaults to 1500 in lib/llm.ts if not set. */
+  max_tokens?: number;
 }
 
 function loadAllModules(): ModuleDefinition[] {

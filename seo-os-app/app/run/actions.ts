@@ -2,7 +2,7 @@
 
 import { prisma } from "@/lib/prisma";
 import { getModuleById } from "@/lib/configLoader";
-import { generateStubOutput } from "@/lib/stubLLM";
+import { runClaudeModule } from "@/lib/llm";
 
 export async function runModule(formData: FormData): Promise<{
   success: boolean;
@@ -48,20 +48,33 @@ export async function runModule(formData: FormData): Promise<{
     },
   });
 
-  // Generate stub output (simulates LLM call)
-  const outputs = generateStubOutput(moduleDef, inputs, clientProfile);
+  // Call Claude API and handle errors
+  let outputs: Record<string, unknown> = {};
+  let finalStatus: "complete" | "error" = "error";
+  let errorMessage: string | undefined;
+
+  try {
+    outputs = await runClaudeModule({ module: moduleDef, inputs, clientProfile });
+    finalStatus = "complete";
+  } catch (err) {
+    errorMessage = err instanceof Error ? err.message : "LLM call failed.";
+    outputs = { _error: errorMessage };
+  }
 
   // JSON round-trip ensures the value satisfies Prisma's InputJsonValue constraint
   // (Record<string, unknown> is too wide; JSON.parse returns `any`)
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const safeOutputs = JSON.parse(JSON.stringify(outputs));
 
-  // Update run to "complete" with outputs
   await prisma.moduleRun.update({
     where: { id: run.id },
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    data: { outputs: safeOutputs, status: "complete" },
+    data: { outputs: safeOutputs, status: finalStatus },
   });
 
+  if (finalStatus === "error") {
+    // Return runId even on error so the failed run is visible in /history
+    return { success: false, error: errorMessage ?? "LLM call failed.", runId: run.id };
+  }
   return { success: true, outputs, runId: run.id };
 }
