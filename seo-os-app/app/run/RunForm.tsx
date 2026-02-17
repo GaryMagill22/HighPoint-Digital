@@ -3,6 +3,7 @@
 import { useTransition, useState } from "react";
 import type { RequiredInput } from "@/lib/configLoader";
 import { runModule } from "./actions";
+import { uploadCrawl } from "./uploadActions";
 
 interface ClientOption {
   id: string;
@@ -21,14 +22,57 @@ interface RunFormProps {
 }
 
 export function RunForm({ clients, modules }: RunFormProps) {
+  const [selectedClientId, setSelectedClientId] = useState("");
   const [selectedModuleId, setSelectedModuleId] = useState("");
   const [output, setOutput] = useState<unknown>(null);
   const [runError, setRunError] = useState<string | null>(null);
   const [runId, setRunId] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
 
+  // Crawl upload state (site-audit only)
+  const [crawlUploadId, setCrawlUploadId] = useState<string | null>(null);
+  const [crawlSummary, setCrawlSummary] = useState<{
+    totalPages: number;
+    indexable: number;
+    nonIndexable: number;
+    with4xx: number;
+    with5xx: number;
+    missingTitle: number;
+    missingMeta: number;
+  } | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
+
   const selectedModule =
     modules.find((m) => m.id === selectedModuleId) ?? null;
+
+  function handleModuleChange(e: React.ChangeEvent<HTMLSelectElement>) {
+    setSelectedModuleId(e.target.value);
+    setCrawlUploadId(null);
+    setCrawlSummary(null);
+    setUploadError(null);
+  }
+
+  async function handleCrawlUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+    const fd = new FormData();
+    fd.append("clientId", selectedClientId);
+    for (const f of Array.from(files)) fd.append("crawlFiles", f);
+    setIsUploading(true);
+    setUploadError(null);
+    setCrawlUploadId(null);
+    setCrawlSummary(null);
+    try {
+      const result = await uploadCrawl(fd);
+      setCrawlUploadId(result.crawlUploadId);
+      setCrawlSummary(result.summary);
+    } catch (err) {
+      setUploadError(err instanceof Error ? err.message : "Upload failed.");
+    } finally {
+      setIsUploading(false);
+    }
+  }
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -53,7 +97,13 @@ export function RunForm({ clients, modules }: RunFormProps) {
         <div>
           <label htmlFor="clientId">Client</label>
           <br />
-          <select id="clientId" name="clientId" required>
+          <select
+            id="clientId"
+            name="clientId"
+            required
+            value={selectedClientId}
+            onChange={(e) => setSelectedClientId(e.target.value)}
+          >
             <option value="">— select a client —</option>
             {clients.map((c) => (
               <option key={c.id} value={c.id}>
@@ -71,7 +121,7 @@ export function RunForm({ clients, modules }: RunFormProps) {
             name="moduleId"
             required
             value={selectedModuleId}
-            onChange={(e) => setSelectedModuleId(e.target.value)}
+            onChange={handleModuleChange}
           >
             <option value="">— select a module —</option>
             {modules.map((m) => (
@@ -110,10 +160,47 @@ export function RunForm({ clients, modules }: RunFormProps) {
           </fieldset>
         )}
 
+        {selectedModuleId === "site-audit" && (
+          <fieldset>
+            <legend>Screaming Frog Crawl Data</legend>
+            <div>
+              <label htmlFor="crawlFiles">Upload CSV export(s)</label>
+              <br />
+              <input
+                id="crawlFiles"
+                type="file"
+                accept=".csv"
+                multiple
+                onChange={handleCrawlUpload}
+                disabled={isUploading || !selectedClientId}
+              />
+            </div>
+            {isUploading && <p>Uploading...</p>}
+            {uploadError && (
+              <p style={{ color: "red" }}>Upload error: {uploadError}</p>
+            )}
+            {crawlSummary && (
+              <p>
+                Uploaded: {crawlSummary.totalPages} pages (
+                {crawlSummary.indexable} indexable, {crawlSummary.with4xx} 4xx,{" "}
+                {crawlSummary.with5xx} 5xx, {crawlSummary.missingTitle} missing
+                title, {crawlSummary.missingMeta} missing meta)
+              </p>
+            )}
+            {crawlUploadId && (
+              <input type="hidden" name="crawlUploadId" value={crawlUploadId} />
+            )}
+          </fieldset>
+        )}
+
         <div>
           <button
             type="submit"
-            disabled={isPending || selectedModuleId === ""}
+            disabled={
+              isPending ||
+              selectedModuleId === "" ||
+              (selectedModuleId === "site-audit" && crawlUploadId === null)
+            }
           >
             {isPending ? "Running..." : "Run"}
           </button>

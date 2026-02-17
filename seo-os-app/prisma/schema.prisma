@@ -11,11 +11,12 @@ datasource db {
 }
 
 model Client {
-  id        String         @id @default(uuid())
-  name      String
-  createdAt DateTime       @default(now())
-  profile   ClientProfile?
-  runs      ModuleRun[]
+  id           String         @id @default(uuid())
+  name         String
+  createdAt    DateTime       @default(now())
+  profile      ClientProfile?
+  runs         ModuleRun[]
+  crawlUploads CrawlUpload[]
 }
 
 model ClientProfile {
@@ -36,4 +37,14 @@ model ModuleRun {
   outputs   Json?
   status    String
   createdAt DateTime @default(now())
+}
+
+model CrawlUpload {
+  id         String   @id @default(cuid())
+  createdAt  DateTime @default(now())
+  clientId   String
+  client     Client   @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  source     String
+  filesMeta  Json
+  parsedData Json
 }
