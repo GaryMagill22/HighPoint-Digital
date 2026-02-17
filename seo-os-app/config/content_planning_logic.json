@@ -1,0 +1,45 @@
+{
+  "_description": "Rules and scoring logic that drive the content planning module when generating content plans.",
+  "version": "1.0.0",
+  "topicClusterDepth": {
+    "pillar": {
+      "minSearchVolume": 1000,
+      "maxKeywordDifficulty": 70,
+      "targetWordCount": 3000
+    },
+    "cluster": {
+      "minSearchVolume": 100,
+      "maxKeywordDifficulty": 50,
+      "targetWordCount": 1200
+    },
+    "supporting": {
+      "minSearchVolume": 10,
+      "maxKeywordDifficulty": 30,
+      "targetWordCount": 800
+    }
+  },
+  "priorityScoring": {
+    "weights": {
+      "searchVolume": 0.35,
+      "keywordDifficulty": 0.25,
+      "businessRelevance": 0.25,
+      "competitorGap": 0.15
+    },
+    "difficultyPenaltyThreshold": 60,
+    "minimumPriorityScore": 20
+  },
+  "publicationCadence": {
+    "default": "weekly",
+    "options": ["daily", "twice-weekly", "weekly", "bi-weekly", "monthly"],
+    "rampUpPeriodWeeks": 4
+  },
+  "contentTypes": [
+    "how-to",
+    "listicle",
+    "comparison",
+    "definition",
+    "case-study",
+    "news",
+    "product-page"
+  ]
+}

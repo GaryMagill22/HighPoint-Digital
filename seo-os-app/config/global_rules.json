@@ -1,0 +1,29 @@
+{
+  "_description": "Global rules and constraints that apply system-wide across all modules and commands.",
+  "version": "1.0.0",
+  "rules": {
+    "content": {
+      "minWordCount": 800,
+      "maxWordCount": 4000,
+      "defaultWordCount": 1500,
+      "requireUniqueH1": true,
+      "requireMetaDescription": true,
+      "maxMetaDescriptionLength": 160,
+      "maxTitleTagLength": 60
+    },
+    "rateLimit": {
+      "maxRequestsPerMinute": 60,
+      "maxConcurrentJobs": 5
+    },
+    "output": {
+      "defaultLocale": "en-AU",
+      "defaultTimezone": "Australia/Sydney",
+      "dateFormat": "YYYY-MM-DD"
+    },
+    "audit": {
+      "crawlDelayMs": 500,
+      "maxPagesPerCrawl": 500,
+      "respectRobotsTxt": true
+    }
+  }
+}

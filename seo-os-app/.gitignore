@@ -1,0 +1,39 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Next.js build output
+.next/
+out/
+
+# TypeScript incremental cache
+*.tsbuildinfo
+next-env.d.ts
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# SQLite database files — do NOT commit local dev database
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+
+# Prisma generated client (regenerated from schema on each install)
+# Note: keep prisma/migrations/ in git — migrations are version-controlled schema history
+node_modules/.prisma/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor directories
+.vscode/
+.idea/
+*.swp
+*.swo

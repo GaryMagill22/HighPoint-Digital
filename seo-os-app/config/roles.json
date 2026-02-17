@@ -1,0 +1,36 @@
+{
+  "_description": "Role definitions for the SEO OS access control system. Each role has a set of allowed command IDs.",
+  "version": "1.0.0",
+  "roles": [
+    {
+      "id": "admin",
+      "label": "Administrator",
+      "description": "Full access to all modules and commands",
+      "permissions": ["*"]
+    },
+    {
+      "id": "strategist",
+      "label": "SEO Strategist",
+      "description": "Access to planning and reporting modules",
+      "permissions": [
+        "content:plan",
+        "report:generate"
+      ]
+    },
+    {
+      "id": "analyst",
+      "label": "SEO Analyst",
+      "description": "Access to audit and reporting tools",
+      "permissions": [
+        "audit:site",
+        "report:generate"
+      ]
+    },
+    {
+      "id": "viewer",
+      "label": "Viewer",
+      "description": "Read-only access to reports",
+      "permissions": []
+    }
+  ]
+}

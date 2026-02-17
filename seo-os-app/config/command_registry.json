@@ -1,0 +1,33 @@
+{
+  "_description": "Registry of all commands available in the SEO OS. Each command maps to a module and defines its input/output contract.",
+  "version": "1.0.0",
+  "commands": [
+    {
+      "id": "audit:site",
+      "label": "Run Site Audit",
+      "module": "site-audit",
+      "description": "Performs a technical SEO audit of the target domain",
+      "inputs": ["clientId", "domain"],
+      "outputs": ["auditReport"],
+      "roles": ["admin", "analyst"]
+    },
+    {
+      "id": "content:plan",
+      "label": "Generate Content Plan",
+      "module": "content-planning",
+      "description": "Generates a keyword-driven content plan based on the client profile",
+      "inputs": ["clientId", "targetKeywords", "timeframeMonths"],
+      "outputs": ["contentPlan"],
+      "roles": ["admin", "strategist"]
+    },
+    {
+      "id": "report:generate",
+      "label": "Generate SEO Report",
+      "module": "reporting",
+      "description": "Compiles a client-facing SEO performance report",
+      "inputs": ["clientId", "dateRangeStart", "dateRangeEnd"],
+      "outputs": ["reportPdf", "reportJson"],
+      "roles": ["admin", "analyst", "strategist"]
+    }
+  ]
+}

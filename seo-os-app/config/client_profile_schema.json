@@ -1,0 +1,56 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "client_profile_schema",
+  "title": "Client Profile",
+  "description": "Schema defining the structure of a client profile within the SEO OS",
+  "type": "object",
+  "required": ["clientId", "businessName", "domain", "primaryNiche"],
+  "properties": {
+    "clientId": {
+      "type": "string",
+      "description": "Unique identifier for the client"
+    },
+    "businessName": {
+      "type": "string",
+      "description": "The client's trading name"
+    },
+    "domain": {
+      "type": "string",
+      "format": "uri",
+      "description": "Primary website domain including protocol"
+    },
+    "primaryNiche": {
+      "type": "string",
+      "description": "The main industry or topic category for this client"
+    },
+    "targetLocations": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Geographic markets being targeted"
+    },
+    "competitors": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "domain": { "type": "string" }
+        }
+      },
+      "description": "Known competitor websites"
+    },
+    "contentGoals": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "High-level content objectives e.g. 'increase organic traffic', 'build topical authority'"
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}

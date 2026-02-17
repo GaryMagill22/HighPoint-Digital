@@ -1,0 +1,48 @@
+{
+  "_description": "Templates defining the shape and format of outputs produced by SEO OS commands.",
+  "version": "1.0.0",
+  "templates": {
+    "auditReport": {
+      "label": "Site Audit Report",
+      "format": "json",
+      "sections": [
+        "executiveSummary",
+        "technicalIssues",
+        "onPageIssues",
+        "backlinkSummary",
+        "recommendations"
+      ]
+    },
+    "contentPlan": {
+      "label": "Content Plan",
+      "format": "json",
+      "sections": [
+        "pillarPages",
+        "clusterArticles",
+        "publicationSchedule",
+        "keywordTargets"
+      ]
+    },
+    "reportPdf": {
+      "label": "Client PDF Report",
+      "format": "pdf",
+      "sections": [
+        "coverPage",
+        "performanceSummary",
+        "trafficTrends",
+        "keywordRankings",
+        "actionItems"
+      ]
+    },
+    "reportJson": {
+      "label": "Machine-Readable Report",
+      "format": "json",
+      "sections": [
+        "metrics",
+        "keywords",
+        "pages",
+        "issues"
+      ]
+    }
+  }
+}
