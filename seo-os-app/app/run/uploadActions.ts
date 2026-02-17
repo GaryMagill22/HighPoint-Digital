@@ -7,12 +7,12 @@ export async function uploadCrawl(formData: FormData): Promise<{
   crawlUploadId: string;
   summary: {
     totalPages: number;
-    indexable: number;
-    nonIndexable: number;
-    with4xx: number;
-    with5xx: number;
-    missingTitle: number;
-    missingMeta: number;
+    statusCodeCounts: Record<string, number>;
+    indexabilityCounts: Record<string, number>;
+    missingTitleCount: number;
+    missingMetaDescriptionCount: number;
+    missingH1Count: number;
+    non200Count: number;
   };
 }> {
   const clientId = formData.get("clientId");

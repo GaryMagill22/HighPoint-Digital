@@ -33,12 +33,12 @@ export function RunForm({ clients, modules }: RunFormProps) {
   const [crawlUploadId, setCrawlUploadId] = useState<string | null>(null);
   const [crawlSummary, setCrawlSummary] = useState<{
     totalPages: number;
-    indexable: number;
-    nonIndexable: number;
-    with4xx: number;
-    with5xx: number;
-    missingTitle: number;
-    missingMeta: number;
+    statusCodeCounts: Record<string, number>;
+    indexabilityCounts: Record<string, number>;
+    missingTitleCount: number;
+    missingMetaDescriptionCount: number;
+    missingH1Count: number;
+    non200Count: number;
   } | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
@@ -181,10 +181,11 @@ export function RunForm({ clients, modules }: RunFormProps) {
             )}
             {crawlSummary && (
               <p>
-                Uploaded: {crawlSummary.totalPages} pages (
-                {crawlSummary.indexable} indexable, {crawlSummary.with4xx} 4xx,{" "}
-                {crawlSummary.with5xx} 5xx, {crawlSummary.missingTitle} missing
-                title, {crawlSummary.missingMeta} missing meta)
+                Uploaded: {crawlSummary.totalPages} pages &mdash;{" "}
+                {crawlSummary.non200Count} non-200,{" "}
+                {crawlSummary.missingTitleCount} missing title,{" "}
+                {crawlSummary.missingMetaDescriptionCount} missing meta,{" "}
+                {crawlSummary.missingH1Count} missing H1
               </p>
             )}
             {crawlUploadId && (

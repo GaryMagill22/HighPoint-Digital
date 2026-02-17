@@ -17,15 +17,17 @@ export interface AuditPage {
 }
 
 export interface AuditInput {
+  source: "screamingfrog";
+  generatedAt: string; // ISO 8601
   pages: AuditPage[];
   summary: {
     totalPages: number;
-    indexable: number;
-    nonIndexable: number;
-    with4xx: number;
-    with5xx: number;
-    missingTitle: number;
-    missingMeta: number;
+    statusCodeCounts: Record<string, number>;
+    indexabilityCounts: Record<string, number>;
+    missingTitleCount: number;
+    missingMetaDescriptionCount: number;
+    missingH1Count: number;
+    non200Count: number;
   };
 }
 
@@ -89,25 +91,33 @@ export function parseScreamingFrogCsvs(contents: string[]): AuditInput {
   }
 
   const pages = Array.from(byUrl.values());
+
+  const statusCodeCounts: Record<string, number> = {};
+  for (const p of pages) {
+    const key = p.statusCode !== null ? String(p.statusCode) : "unknown";
+    statusCodeCounts[key] = (statusCodeCounts[key] ?? 0) + 1;
+  }
+
+  const indexabilityCounts: Record<string, number> = {};
+  for (const p of pages) {
+    const key = p.indexability ?? "unknown";
+    indexabilityCounts[key] = (indexabilityCounts[key] ?? 0) + 1;
+  }
+
   const summary = {
     totalPages: pages.length,
-    indexable: pages.filter(
-      (p) => p.indexability?.toLowerCase() === "indexable"
-    ).length,
-    nonIndexable: pages.filter(
-      (p) =>
-        p.indexability !== null &&
-        p.indexability?.toLowerCase() !== "indexable"
-    ).length,
-    with4xx: pages.filter(
-      (p) => p.statusCode !== null && p.statusCode >= 400 && p.statusCode < 500
-    ).length,
-    with5xx: pages.filter(
-      (p) => p.statusCode !== null && p.statusCode >= 500
-    ).length,
-    missingTitle: pages.filter((p) => !p.title).length,
-    missingMeta: pages.filter((p) => !p.metaDescription).length,
+    statusCodeCounts,
+    indexabilityCounts,
+    missingTitleCount: pages.filter((p) => !p.title).length,
+    missingMetaDescriptionCount: pages.filter((p) => !p.metaDescription).length,
+    missingH1Count: pages.filter((p) => !p.h1).length,
+    non200Count: pages.filter((p) => p.statusCode !== 200).length,
   };
 
-  return { pages, summary };
+  return {
+    source: "screamingfrog",
+    generatedAt: new Date().toISOString(),
+    pages,
+    summary,
+  };
 }
