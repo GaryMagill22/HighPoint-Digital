@@ -135,28 +135,40 @@ export function RunForm({ clients, modules }: RunFormProps) {
         {selectedModule && selectedModule.required_inputs.length > 0 && (
           <fieldset>
             <legend>Inputs</legend>
-            {selectedModule.required_inputs.map((field) => (
-              <div key={field.key}>
-                <label htmlFor={field.key}>{field.label}</label>
-                <br />
-                {field.type === "textarea" ? (
-                  <textarea
-                    id={field.key}
-                    name={field.key}
-                    placeholder={field.placeholder ?? ""}
-                    rows={4}
-                    cols={60}
-                  />
-                ) : (
+            {selectedModule.required_inputs.map((field) => {
+              if (field.type === "hidden") {
+                return (
                   <input
-                    id={field.key}
+                    key={field.key}
+                    type="hidden"
                     name={field.key}
-                    type={field.type}
-                    placeholder={field.placeholder ?? ""}
+                    value={crawlUploadId ?? ""}
                   />
-                )}
-              </div>
-            ))}
+                );
+              }
+              return (
+                <div key={field.key}>
+                  <label htmlFor={field.key}>{field.label}</label>
+                  <br />
+                  {field.type === "textarea" ? (
+                    <textarea
+                      id={field.key}
+                      name={field.key}
+                      placeholder={field.placeholder ?? ""}
+                      rows={4}
+                      cols={60}
+                    />
+                  ) : (
+                    <input
+                      id={field.key}
+                      name={field.key}
+                      type={field.type}
+                      placeholder={field.placeholder ?? ""}
+                    />
+                  )}
+                </div>
+              );
+            })}
           </fieldset>
         )}
 
@@ -187,9 +199,6 @@ export function RunForm({ clients, modules }: RunFormProps) {
                 {crawlSummary.missingMetaDescriptionCount} missing meta,{" "}
                 {crawlSummary.missingH1Count} missing H1
               </p>
-            )}
-            {crawlUploadId && (
-              <input type="hidden" name="crawlUploadId" value={crawlUploadId} />
             )}
           </fieldset>
         )}

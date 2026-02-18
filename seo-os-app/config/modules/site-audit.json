@@ -14,6 +14,11 @@
       "label": "Max Pages to Crawl",
       "type": "number",
       "placeholder": "100"
+    },
+    {
+      "key": "crawlUploadId",
+      "label": "Crawl Upload ID",
+      "type": "hidden"
     }
   ],
   "prompt_template": "You are an SEO auditor. Client profile: {{client_profile}}. Audit the domain {{inputs.domain}} crawling up to {{inputs.maxPages}} pages. Return a structured audit report covering technical issues, on-page issues, backlink summary, and prioritised recommendations.",

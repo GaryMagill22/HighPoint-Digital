@@ -4,7 +4,7 @@
 import fs from "node:fs";
 import path from "node:path";
 
-export type InputFieldType = "text" | "number" | "date" | "textarea";
+export type InputFieldType = "text" | "number" | "date" | "textarea" | "hidden";
 
 export interface RequiredInput {
   key: string;
