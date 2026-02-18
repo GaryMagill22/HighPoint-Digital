@@ -65,6 +65,7 @@ export function RunForm({ clients, modules }: RunFormProps) {
     setCrawlSummary(null);
     try {
       const result = await uploadCrawl(fd);
+      console.log("UPLOAD RESULT:", result);
       setCrawlUploadId(result.crawlUploadId);
       setCrawlSummary(result.summary);
     } catch (err) {
